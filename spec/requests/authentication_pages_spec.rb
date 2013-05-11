@@ -1,3 +1,8 @@
+# should_have_error_message
+# should_have_signin_message
+# valid_signin(user)
+# These are all RSpec matchers located in /support/utilities.rb
+
 require 'spec_helper'
 
 describe "Authentication" do
@@ -7,7 +12,7 @@ describe "Authentication" do
 	before { visit signin_path }
 	
 	it { should have_selector('h1', text: 'Sign in') }
-	it { should have_selector('title', text: 'Sign in') }
+	it { should have_signin_message('Sign in') }
     end    
 
     describe "signin" do
@@ -16,22 +21,18 @@ describe "Authentication" do
 	describe "with invalid information" do
 		before { click_button "Sign in" }
 
-		it { should have_selector('title', text: 'Sign in') }
-		it { should have_selector('div.alert.alert-error', text: 'Invalid') }
+		it { should have_signin_message('Sign in') }
+		it { should have_error_message('Invalid') }
 
 		describe "after visiting another page" do
 			before { click_link "Home" }
-			it { should_not have_selector('div.alert.alert-error') }
+			specify { div_alert_selector }
 		end
 	end
 	
 	describe "with valid information" do
 		let(:user) { FactoryGirl.create(:user) }
-		before do
-			fill_in "Email",	with: user.email.upcase
-			fill_in "Password", 	with: user.password
-			click_button "Sign in"
-		end
+		before { valid_signin(user) }
 
 		describe "followed by signout" do
         		before { click_link "Sign out" }
