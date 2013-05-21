@@ -54,6 +54,22 @@ describe "Authentication" do
     end
 
     describe "authorization" do
+
+	describe "as non-admin user" do
+		let(:user) { FactoryGirl.create(:user) }
+		let(:non_admin) { FactoryGirl.create(:user) }
+
+		before do 
+			visit signin_path
+			valid_signin non_admin
+		end
+
+		describe "submitting a DELETE request to the Users#destroy action do" do
+			before { delete user_path(user) }
+			specify { response.should redirect_to(root_path) }
+		end
+	end
+
 	describe "for non-signed-in users" do
 		let(:user) { FactoryGirl.create(:user) }
 	
