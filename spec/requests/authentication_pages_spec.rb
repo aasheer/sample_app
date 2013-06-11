@@ -15,6 +15,14 @@ describe "Authentication" do
 	it { should have_signin_message('Sign in') }
     end    
 
+    describe "for non-signed in users" do
+	let(:user) { FactoryGirl.create(:user) }
+	before { visit signin_path }
+
+	it { should_not have_link('Profile', href: user_path(user)) }
+	it { should_not have_link('Settings', href: edit_user_path(user)) }
+    end
+
     describe "signin" do
  	before { visit signin_path }
 
@@ -64,7 +72,7 @@ describe "Authentication" do
 			valid_signin non_admin
 		end
 
-		describe "submitting a DELETE request to the Users#destroy action do" do
+		describe "submitting a DELETE request to the Users#destroy action" do
 			before { delete user_path(user) }
 			specify { response.should redirect_to(root_path) }
 		end
