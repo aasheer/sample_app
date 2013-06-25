@@ -32,6 +32,19 @@ describe "Static pages" do
                         page.should have_selector("li##{item.id}", text: item.content)
                 end
         end
+
+	it "should render the number of microposts for the user" do
+		page.should have_selector("span", text: user.microposts.count.to_s)
+	end
+
+	it "should render the number of microposts with correct pluralization" do
+		expect { rspec_pluralize(1, "micropost").to eq("1 micropost") }
+		expect { rspec_pluralize(0, "micropost").to eq("0 microposts") }			
+	end
+
+	describe "feed pagination" do
+		pagination_is_valid
+	end
     end
   end
 

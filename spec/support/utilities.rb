@@ -24,6 +24,16 @@ def valid_update
         click_button "Save changes"
 end
 
+def rspec_pluralize(numOfItems, numInWords)
+	view.pluralize(numOfitems, numInWords)
+end
+
+def pagination_is_valid
+        before(:all) { 30.times { FactoryGirl.create(:micropost, user: user) } }
+        after(:all)  { User.delete_all }
+
+        it { should have_selector('div.pagination') }
+end
 
 RSpec::Matchers.define :have_error_message do |message|
 	match do |page|
